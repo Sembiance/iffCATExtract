@@ -6,4 +6,4 @@ iffCATExtract: iffCATExtract.c
 	gcc $(CFLAGS) $(LDFLAGS) -o $@ $< $(LIBS)
 
 clean:
-	rm -f ilbm2frames
+	rm -f iffCATExtract

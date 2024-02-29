@@ -102,7 +102,7 @@ int main(int argc, char ** argv)
 		return EXIT_FAILURE;
 	}
 
-	IFF_Chunk * chunk = IFF_readFd(fd, NULL, 0);
+	IFF_Chunk * chunk = IFF_readFd(fd, NULL);
     if(!chunk)
 	{
 		fclose(fd);
@@ -110,11 +110,13 @@ int main(int argc, char ** argv)
 		return EXIT_FAILURE;
 	}
 
-	if(IFF_compareId(chunk->chunkId, "CAT ")!=0)
+	if(chunk->chunkId!=IFF_ID_CAT)
 	{
-		IFF_free(chunk, NULL, 0);
+		IFF_free(chunk, NULL);
 		fclose(fd);
-		fprintf(stderr, "IFF is not a CAT file [%c%c%c%c]\n", chunk->chunkId[0], chunk->chunkId[1], chunk->chunkId[2], chunk->chunkId[3]);
+		char id[4];
+		IFF_idToString(chunk->chunkId, id);
+		fprintf(stderr, "IFF is not a CAT file [%c%c%c%c]\n", id[0], id[1], id[2], id[3]);
 		return EXIT_FAILURE;
 	}
 
@@ -124,10 +126,12 @@ int main(int argc, char ** argv)
 	for(unsigned int i=0;i<cat->chunkLength;i++)
 	{
 		IFF_Chunk * subChunk = cat->chunk[i];
-		sprintf(filePath, "%s/%05d_%c%c%c%c.iff", outputDirPath, i, subChunk->chunkId[0], subChunk->chunkId[1], subChunk->chunkId[2], subChunk->chunkId[3]);
-		IFF_write(filePath, subChunk, NULL, 0);
+		char subid [4];
+		IFF_idToString(subChunk->chunkId, subid);
+		sprintf(filePath, "%s/%05d_%c%c%c%c.iff", outputDirPath, i, subid[0], subid[1], subid[2], subid[3]);
+		IFF_write(filePath, subChunk, NULL);
 	}
 
-	IFF_free(chunk, NULL, 0);
+	IFF_free(chunk, NULL);
 	fclose(fd);
 }
