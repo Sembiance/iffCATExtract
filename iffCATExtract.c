@@ -13,7 +13,7 @@
 #include <libiff/id.h>
 #include <libiff/cat.h>
 
-#define IFFCATEXTRACT_VERSION "1.0.0"
+#define IFFCATEXTRACT_VERSION "1.1.0"
 
 static void usage(void)
 {
